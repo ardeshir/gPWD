@@ -4,7 +4,7 @@ import (
         "fmt"
         "os"
 	"flag"
-	"string"
+	"strings"
         // "path/filepath"
 )
 
@@ -39,24 +39,33 @@ func main() {
 	minusA := flag.Bool("a", false, "a")
 	minusS := flag.Bool("s", false, "s")
 
-	flag.Parge()
+	flag.Parse()
 	flags := flag.Args()
 	if len(flags) == 0 {
 		fmt.Println("Please provide an argument")
 	}
-	 file := flags[0]
+	
+	file := flags[0]
 	foundIt := false
 
 	path := os.Getenv("PATH")
 	pathSlice := strings.Split(path, ":")
+	
 	for _, directory := range pathSlice {
+		
 		fullPath := directory + "/" + file
 		fileInfo, err := os.Stat(fullPath)
+		
              if err == nil {
-
+                
+                mode := fileInfo.Mode()
+                
 		if mode.IsRegular() {
+			
 			if mode&0111 != 0  {
+				
 				foundIt = true
+				
 				if *minusS == true {
 					os.Exit(0)
 				}
@@ -71,7 +80,7 @@ func main() {
 	    }
 	}
 
-	if foundIt == false [
+	if foundIt == false {
 		os.Exit(1)
 	}
 } // end of main
