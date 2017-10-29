@@ -3,11 +3,14 @@ package main
 import (
         "fmt"
         "os"
-        "path/filepath"
+	"flag"
+	"string"
+        // "path/filepath"
 )
 
 func main() {
 
+	/*
         args := os.Args
         pwd, err := os.Getwd()
 
@@ -31,6 +34,48 @@ func main() {
                 if err == nil  {
                         fmt.Println(realpath)
                 }
-        }
+        } */
+       //  USE FLAG
+	minusA := flag.Bool("a", false, "a")
+	minusS := flag.Bool("s", false, "s")
 
-}
+	flag.Parge()
+	flags := flag.Args()
+	if len(flags) == 0 {
+		fmt.Println("Please provide an argument")
+	}
+	 file := flags[0]
+	foundIt := false
+
+	path := os.Getenv("PATH")
+	pathSlice := strings.Split(path, ":")
+	for _, directory := range pathSlice {
+		fullPath := directory + "/" + file
+		fileInfo, err := os.Stat(fullPath)
+             if err == nil {
+
+		if mode.IsRegular() {
+			if mode&0111 != 0  {
+				foundIt = true
+				if *minusS == true {
+					os.Exit(0)
+				}
+				if *minusA == true {
+					fmt.Println(fullPath)
+				} else {
+					fmt.Println(fullPath)
+					os.Exit(0)
+				}
+			}
+		}
+	    }
+	}
+
+	if foundIt == false [
+		os.Exit(1)
+	}
+} // end of main
+
+
+
+
